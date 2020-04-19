@@ -8,7 +8,7 @@ import InitialPageLoader from 'Components/initialPageLoader';
 
 let latestTimeout;
 
-const ListingPage = ({ getMoviesListAction, clearMovieListAction, moviesList }) => {
+const ListingPage = ({ getMoviesListAction, clearMovieListAction, moviesList, history }) => {
   const [searchValue, setSearchValue] = useState('');
   const pageLoaderRef = useRef(null);
 
@@ -23,6 +23,12 @@ const ListingPage = ({ getMoviesListAction, clearMovieListAction, moviesList }) 
       latestTimeout = setTimeout(()=>pageLoaderRef.current.reload(), 600);
     else 
       clearMovieListAction();
+  }
+
+  const onItemClick = (item) => {
+    const id = item.imdbID;
+    clearMovieListAction();
+    history.push(`/details/${id}`);
   }
 
   return (
@@ -43,7 +49,7 @@ const ListingPage = ({ getMoviesListAction, clearMovieListAction, moviesList }) 
         <div className={styles.movies_container}>
           <div className={styles.movies_list_container}>
             {
-              moviesList && moviesList.map(movieDetail => <MoviesListItem movieDetail={movieDetail} />)
+              moviesList && moviesList.map(movieDetail => <MoviesListItem movieDetail={movieDetail} onItemClick={onItemClick} />)
             }
           </div>
         </div>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styles from './index.module.scss';
 import placeholderImage from 'Icons/movie-placeholder.png';
 
-const MovieListItem = ({ movieDetail }) => {
+const MovieListItem = ({ movieDetail, onItemClick }) => {
   const [imageLoaded, setImageState] = useState(false);
   return (
-    <div className={styles.list_item_container}>
+    <div className={styles.list_item_container} onClick={()=>onItemClick(movieDetail)}>
       {
         (movieDetail.Poster !== 'N/A') && (
           <img
