@@ -297,6 +297,7 @@ module.exports = function(webpackEnv) {
         Hoc: path.resolve(__dirname, "../src/modules/hoc"),
         Components: path.resolve(__dirname, "../src/modules/components"),
         Pages: path.resolve(__dirname, "../src/modules/pages"),
+        Icons: path.resolve(__dirname, "../src/assets/icons"),
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',

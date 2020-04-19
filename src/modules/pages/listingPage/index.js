@@ -9,7 +9,7 @@ const ListingPage = () => {
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
         placeholder="Type to search"
-      />
+      />      
     </div>
   )
 }
