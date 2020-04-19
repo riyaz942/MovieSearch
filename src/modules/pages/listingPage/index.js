@@ -28,7 +28,8 @@ const ListingPage = ({ getMoviesListAction, moviesList }) => {
       <input
         value={searchValue}
         onChange={onChangeSearch}
-        placeholder="Type to search"
+        placeholder="Type to search a Movie"
+        className={styles.search_input}
       />
       <InitialPageLoader
         ref={pageLoaderRef}
