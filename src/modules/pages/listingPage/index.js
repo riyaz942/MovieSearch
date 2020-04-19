@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { getMoviesListAction } from './redux/actions';
+import { getMoviesListAction, clearMovieListAction } from './redux/actions';
 import styles from './index.module.scss'
 import MoviesListItem from 'Components/movieListItem';
 import InitialPageLoader from 'Components/initialPageLoader';
 
 let latestTimeout;
 
-const ListingPage = ({ getMoviesListAction, moviesList }) => {
+const ListingPage = ({ getMoviesListAction, clearMovieListAction, moviesList }) => {
   const [searchValue, setSearchValue] = useState('');
   const pageLoaderRef = useRef(null);
 
@@ -21,6 +21,8 @@ const ListingPage = ({ getMoviesListAction, moviesList }) => {
 
     if (searchString)
       latestTimeout = setTimeout(()=>pageLoaderRef.current.reload(), 600);
+    else 
+      clearMovieListAction();
   }
 
   return (
@@ -58,7 +60,8 @@ const mapStateToProps = state => {
 
 const mapDispathToProps = dispatch => {
   return {
-    getMoviesListAction: bindActionCreators(getMoviesListAction, dispatch)
+    getMoviesListAction: bindActionCreators(getMoviesListAction, dispatch),
+    clearMovieListAction: bindActionCreators(clearMovieListAction, dispatch),
   };
 };
 

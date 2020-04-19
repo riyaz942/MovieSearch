@@ -4,6 +4,7 @@ import {
   GET_MOVIES_LIST_REQUEST,
   GET_MOVIES_LIST_SUCCESS,
   GET_MOVIES_LIST_FAILURE,
+  CLEAR_MOVIE_LIST,
 } from './constants';
 
 export function getMoviesListAction(searchString) {
@@ -18,4 +19,10 @@ export function getMoviesListAction(searchString) {
       ]
     }
   };
+}
+
+export function clearMovieListAction() {
+  return {
+    type: CLEAR_MOVIE_LIST,
+  }
 }

@@ -2,6 +2,7 @@ import {
   GET_MOVIES_LIST_REQUEST,
   GET_MOVIES_LIST_SUCCESS,
   GET_MOVIES_LIST_FAILURE,
+  CLEAR_MOVIE_LIST,
 } from './constants';
 
 const initialState = {
@@ -16,9 +17,13 @@ export default function listingPageReducer(
   switch (type) {
     case GET_MOVIES_LIST_SUCCESS:
       return {
-        ...state,
         moviesList: payload.Search,
       };
+    case CLEAR_MOVIE_LIST:
+      return {
+        moviesList: [],
+      }
+
     default:
       return state;
   }
