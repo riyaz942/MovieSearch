@@ -294,6 +294,9 @@ module.exports = function(webpackEnv) {
         'react-native': 'react-native-web',
         Redux: path.resolve(__dirname, "../src/redux"),
         Utils: path.resolve(__dirname, "../src/utils"),
+        Hoc: path.resolve(__dirname, "../src/modules/hoc"),
+        Components: path.resolve(__dirname, "../src/modules/components"),
+        Pages: path.resolve(__dirname, "../src/modules/pages"),
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',
