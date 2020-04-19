@@ -4,7 +4,6 @@ import placeholderImage from 'Icons/movie-placeholder.png';
 
 const MovieListItem = ({ movieDetail }) => {
   const [imageLoaded, setImageState] = useState(false);
-  console.log('value :', movieDetail.Poster == 'N/A')
   return (
     <div className={styles.list_item_container}>
       {

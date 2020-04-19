@@ -29,7 +29,7 @@ class InitialPageLoader extends Component {
     initialPageApi()
       .then(data => {
         console.log("initialPageLoader success", data);
-        if (isTypeSuccess(data.type)) this.setState({ loading: false });
+        if (isTypeSuccess(data.type) && !data.payload.Error) this.setState({ loading: false });        
         else this.setState({ loading: false, isError: true });
       })
       .catch(error => {
@@ -81,7 +81,7 @@ class InitialPageLoader extends Component {
 
     return (
       <div
-        className={`${main_container} ${className}`}
+        className={`${styles.main_container} ${className}`}
       >
         {isComponentReady &&
           (isError ? (
@@ -104,7 +104,6 @@ InitialPageLoader.defaultProps = {
   showEmptyScreen: false,
   headingErrorMessage: "Whoops! Something Went Wrong.",
   errorMessage: "There was a problem with your action.",
-  emptyMessage: "Looks like its empty",
   callApiOnMount: true,
 
   customEmptyScreen: null,
@@ -117,9 +116,9 @@ InitialPageLoader.defaultProps = {
 InitialPageLoader.propTypes = {
   children: PropTypes.any.isRequired, //(Mandetory) the children to show after the api call
   initialPageApi: PropTypes.func.isRequired, //(Mandetory) the promise in which the api call is being made
-  childrenItems: PropTypes.any, //(Optional) ... To handle empty screens if there are no items
+  isEmpty: PropTypes.bool, //(Optional) Shows empty screen if true when loaoding is component without any error
   errorMessage: PropTypes.string, //(Optional) Error message in case required differntly on different screens
-  emptyMessage: PropTypes.string, //(Optional) Empty message in case required differntly on different screens
+  emptyScreenMessage: PropTypes.string, //(Optional) Empty message in case required differntly on different screens
   customLoader: PropTypes.any, //(Optional) Component to show instead of the default laoder
   callApiOnMount: PropTypes.bool, //(Optional) Don't automatically want to call the api on mount, instead
   //handle it manually using ref and calling the reload method

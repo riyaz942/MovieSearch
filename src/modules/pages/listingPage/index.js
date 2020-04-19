@@ -1,14 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getMoviesListAction } from './redux/actions';
 import styles from './index.module.scss'
 import MoviesListItem from 'Components/movieListItem';
+import InitialPageLoader from 'Components/initialPageLoader';
 
 let latestTimeout;
 
 const ListingPage = ({ getMoviesListAction, moviesList }) => {
   const [searchValue, setSearchValue] = useState('');
+  const pageLoaderRef = useRef(null);
 
   const onChangeSearch = (e) => {
     const searchString = e.target.value;
@@ -16,8 +18,9 @@ const ListingPage = ({ getMoviesListAction, moviesList }) => {
     setSearchValue(searchString);
     if (latestTimeout)
       clearTimeout(latestTimeout);
+
     if (searchString)
-      latestTimeout = setTimeout(() => getMoviesListAction(searchString), 600);
+      latestTimeout = setTimeout(()=>pageLoaderRef.current.reload(), 600);
   }
 
   return (
@@ -27,21 +30,21 @@ const ListingPage = ({ getMoviesListAction, moviesList }) => {
         onChange={onChangeSearch}
         placeholder="Type to search"
       />
-      {
-        (searchValue) ? (
-          <div className={styles.movies_container}>
-            <div className={styles.movies_list_container}>
-              {
-                moviesList.map(movieDetail => <MoviesListItem movieDetail={movieDetail} />)
-              }
-            </div>
+      <InitialPageLoader
+        ref={pageLoaderRef}
+        callApiOnMount={false}
+        isEmpty={moviesList && moviesList.length == 0}
+        emptyScreenMessage="Search Something"
+        initialPageApi={() => getMoviesListAction(searchValue)}
+      >
+        <div className={styles.movies_container}>
+          <div className={styles.movies_list_container}>
+            {
+              moviesList && moviesList.map(movieDetail => <MoviesListItem movieDetail={movieDetail} />)
+            }
           </div>
-        ) : (
-            <div>
-              Search box is empty.
-            </div>
-          )
-      }
+        </div>
+      </InitialPageLoader>
     </div>
   )
 }
