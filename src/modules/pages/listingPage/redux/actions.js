@@ -9,7 +9,7 @@ import {
 export function getMoviesListAction(searchString) {
   return {
     [RSAA]: {
-      endpoint: `${API_ROOT}/?apikey=${'edd4e8b1'}&page=1&s=${searchString}`,
+      endpoint: `${API_ROOT}/?&page=1&s=${searchString}`,
       method: "GET",
       types: [
         GET_MOVIES_LIST_REQUEST,
