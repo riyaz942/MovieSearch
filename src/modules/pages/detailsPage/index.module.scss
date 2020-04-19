@@ -1,3 +1,8 @@
+$mobile-width: "only screen and (max-width : 450px)";
+$tablet-width: "only screen and (max-width : 870px)";
+$desktop-width: "only screen and (max-width : 1024px)";
+
+
 .container {
   display: flex;
   flex-direction: column;
@@ -60,5 +65,66 @@
 
   .description {
     margin-left: 16px;
+  }
+}
+
+
+//----------------------------------------responsive
+
+@media #{$desktop-width} {
+  .container {
+
+    .scrolling_container {
+      padding: 0px 200px;
+    }
+  }    
+}
+
+
+
+@media #{$tablet-width} {
+  .container {
+    .scrolling_container {
+      padding: 0px 50px;
+    }    
+  } 
+
+  .content_container {  
+    font-size: 13px;
+
+    .image {
+      height: 300px;
+    }  
+    .movie_title {
+      font-size: 26px;
+    }  
+    .plot {
+      font-size: 18px;
+    }
+  }
+}
+
+
+
+
+@media #{$mobile-width}{
+  .container {
+    
+    .scrolling_container {
+      padding: 0px 0px;
+    }
+  }
+
+  .content_container {  
+    font-size: 12px;
+    .image {
+      height: 200px;
+    }  
+    .movie_title {
+      font-size: 24px;
+    }  
+    .plot {
+      font-size: 16px;
+    }
   }
 }
