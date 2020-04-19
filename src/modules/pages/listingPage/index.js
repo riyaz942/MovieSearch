@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { getMoviesListAction } from './redux/actions';
 
-const ListingPage = () => {
+const ListingPage = ({getMoviesListAction}) => {
   const [searchValue, setSearchValue] = useState('');
+
+  useEffect(()=> {
+    getMoviesListAction('Avengers');
+  },[])
 
   return (
     <div>
@@ -14,5 +21,19 @@ const ListingPage = () => {
   )
 }
 
+const mapStateToProps = state => {
+  return {
+    movieLists: state.listingPageReducer,
+  };
+};
 
-export default ListingPage;
+const mapDispathToProps = dispatch => {
+  return {
+    getMoviesListAction: bindActionCreators(getMoviesListAction, dispatch)
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispathToProps
+)(ListingPage);

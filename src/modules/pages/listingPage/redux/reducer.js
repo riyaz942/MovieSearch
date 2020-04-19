@@ -1,7 +1,7 @@
 import {
-  GET_PRODUCT_LIST_REQUEST,
-  GET_PRODUCT_LIST_SUCCESS,
-  GET_PRODUCT_LIST_FAILURE,
+  GET_MOVIES_LIST_REQUEST,
+  GET_MOVIES_LIST_SUCCESS,
+  GET_MOVIES_LIST_FAILURE,
 } from './constants';
 
 const initialState = {
@@ -13,7 +13,7 @@ export default function listingPageReducer(
   { type, payload }
 ) {
   switch (type) {
-    case GET_PRODUCT_LIST_SUCCESS:
+    case GET_MOVIES_LIST_SUCCESS:
       return {
         ...state,
         moviesList: payload,
