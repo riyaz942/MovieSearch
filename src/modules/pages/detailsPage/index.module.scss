@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 30px 0px;
+  overflow: auto;
+
+  .back_button {
+
+  }
+
+  .scrolling_container {
+    flex:1;
+    align-self: stretch;
+    overflow: auto;
+
+    .content_container {
+      background: green;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .image {
+
+      }
+    }
+  }
+}
