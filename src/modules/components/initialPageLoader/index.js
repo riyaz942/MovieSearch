@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import infiniteLoader from "Icons/circular-loader.gif";
-import DivColumn from "CommonComponents/divColumn";
 import { isTypeSuccess } from "Utils/validationHelper";
 import styles from "./index.module.scss";
 
@@ -43,13 +42,13 @@ class InitialPageLoader extends Component {
 
   loaderScreen = () => {
     return (
-      <DivColumn fillParent verticalCenter horizontalCenter>
+      <div className={styles.loader_container}>
         <img
           src={infiniteLoader}
           className={styles.loader}
           alt="Loading ..."
         />
-      </DivColumn>
+      </div>
     )
   }
 
@@ -60,10 +59,10 @@ class InitialPageLoader extends Component {
     } = this.props;
 
     return (
-      <DivColumn fillParent verticalCenter horizontalCenter className={styles.error_container}>
+      <div className={styles.error_container}>
         <div className={styles.error_title_text}>{emptyScreenTitle}</div>
         <div className={styles.error_message_text}>{emptyScreenMessage}</div>
-      </DivColumn>
+      </div>
     )
   }
 
@@ -81,23 +80,22 @@ class InitialPageLoader extends Component {
     const { loading, isError, isComponentReady } = this.state;
 
     return (
-      <DivColumn
-        fillParent
-        className={`${className}`}
+      <div
+        className={`${main_container} ${className}`}
       >
         {isComponentReady &&
           (isError ? (
-            <DivColumn fillParent verticalCenter horizontalCenter className={styles.error_container}>
+            <div className={styles.error_container}>
               <div className={styles.error_title_text}>{headingErrorMessage}</div>
               <div className={styles.error_message_text}>{errorMessage}</div>
               <br />
               <button onClick={this.makePageApiCall}>Retry</button>
-            </DivColumn>
+            </div>
           ) : loading ? customLoader ? customLoader : this.loaderScreen()
               : isEmpty ? customEmptyScreen ? customEmptyScreen : this.emptyScreen()
                 : children
           )}
-      </DivColumn>
+      </div>
     );
   }
 }

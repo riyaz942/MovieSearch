@@ -4,17 +4,25 @@ import placeholderImage from 'Icons/movie-placeholder.png';
 
 const MovieListItem = ({ movieDetail }) => {
   const [imageLoaded, setImageState] = useState(false);
-
+  console.log('value :', movieDetail.Poster == 'N/A')
   return (
     <div className={styles.list_item_container}>
-      <img
-        src={movieDetail.Poster}
-        onLoad={()=>setImageState(true)}
-        className={styles.img}
-      />
       {
-        !imageLoaded && (
-          <img src={placeholderImage} />
+        (movieDetail.Poster !== 'N/A') && (
+          <img
+            src={movieDetail.Poster}
+            onLoad={() => setImageState(true)}
+            className={styles.img}
+          />
+        )
+      }
+
+      {
+        (!imageLoaded || movieDetail.Poster == 'N/A') && (
+          <img
+            className={styles.img}
+            src={placeholderImage}
+          />
         )
       }
       <div className={styles.title}>{movieDetail.Title}</div>
