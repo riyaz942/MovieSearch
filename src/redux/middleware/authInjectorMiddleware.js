@@ -25,7 +25,6 @@ export default store => next => action => {
       // }
       // TODO Move constants to Dotenv file.
       callApi.endpoint = `${callApi.endpoint}&apikey=${'edd4e8b1'}`
-      console.log('Value :,', callApi);
       return next(action);
     }
   }

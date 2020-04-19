@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getMoviesListAction } from './redux/actions';
 
+let latestTimeout;
+
 const ListingPage = ({getMoviesListAction}) => {
   const [searchValue, setSearchValue] = useState('');
 
-  useEffect(()=> {
-    getMoviesListAction('Avengers');
-  },[])
+  const onChangeSearch = (e) => {
+    const searchString = e.target.value;
+    
+    setSearchValue(searchString);  
+    if(latestTimeout)
+      clearTimeout(latestTimeout);      
+    if (searchString)
+      latestTimeout = setTimeout(()=>getMoviesListAction(searchString), 600);
+  }
 
   return (
     <div>
       <input
         value={searchValue}
-        onChange={e => setSearchValue(e.target.value)}
+        onChange={onChangeSearch}
         placeholder="Type to search"
       />      
     </div>

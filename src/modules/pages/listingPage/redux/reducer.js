@@ -12,11 +12,12 @@ export default function listingPageReducer(
   state = initialState,
   { type, payload }
 ) {
+
   switch (type) {
     case GET_MOVIES_LIST_SUCCESS:
       return {
         ...state,
-        moviesList: payload,
+        moviesList: payload.Search,
       };
     default:
       return state;
