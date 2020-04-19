@@ -5,6 +5,7 @@ import {
   GET_MOVIES_LIST_SUCCESS,
   GET_MOVIES_LIST_FAILURE,
   CLEAR_MOVIE_LIST,
+  SET_SEARCH_STRING,
 } from './constants';
 
 export function getMoviesListAction(searchString) {
@@ -19,6 +20,13 @@ export function getMoviesListAction(searchString) {
       ]
     }
   };
+}
+
+export function setSearchString(value) {
+  return {
+    type: SET_SEARCH_STRING,
+    payload: value
+  }
 }
 
 export function clearMovieListAction() {

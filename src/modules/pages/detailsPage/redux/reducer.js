@@ -15,7 +15,6 @@ export default function detailsPageReducer(
   switch (type) {
     case GET_MOVIE_DETAILS_SUCCESS:
       return {
-        ...state,
         movieDetails: payload,
       };
     default:
