@@ -1,0 +1,41 @@
+//@import '~Styles/colors.module';
+
+
+.main_container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-self: stretch;
+}
+
+.error_container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-self: stretch;
+  justify-content: center;
+  align-items: center;
+
+  .error_title_text {
+    font-size: 50px;
+    font-weight: bold;
+  }
+
+  .error_message_text {
+    font-size: 16px;
+  }
+}
+
+
+.loader_container {
+  display: flex;
+  flex: 1;
+  align-self: stretch;
+  justify-content: center;
+  align-items: center;
+  
+  .loader {
+    width: 50px;
+    height: 50px;
+  }  
+}

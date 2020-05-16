@@ -1,133 +1,122 @@
-import React, { Component } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  Fragment,
+  useImperativeHandle,
+  forwardRef
+} from "react";
 import PropTypes from "prop-types";
-import infiniteLoader from "Icons/circular-loader.gif";
-import { isTypeSuccess } from "Utils/validationHelper";
 import styles from "./index.module.scss";
+import LoaderComponent from "./components/loaderComponent";
+import ErrorComponent from "./components/errorComponent";
+import EmptyComponent from "./components/emptyComponent";
 
-class InitialPageLoader extends Component {
-  state = {
-    loading: false,
-    isError: false,
-    isComponentReady: false
-  };
+const pageStates = {
+  LOADING: "LOADING",
+  ERROR: "ERROR",
+  COMPLETED: "COMPLETED"
+};
 
-  componentDidMount() {
-    const { callApiOnMount } = this.props;
-    if (callApiOnMount) this.makePageApiCall();
+const InitialPageLoader = forwardRef(
+  (
+    {
+      callApiOnMount,
+      isEmpty,
+      api,
+      successCondition,
+      responseParser,
 
-    this.setState({ isComponentReady: true }); //Had to do it for now
-  }
-
-  reload = () => {
-    this.makePageApiCall();
-  };
-
-  makePageApiCall = () => {
-    const { initialPageApi } = this.props;
-    this.setState({ loading: true, isError: false });
-
-    initialPageApi()
-      .then(data => {
-        console.log("initialPageLoader success", data);
-        if (isTypeSuccess(data.type) && !data.payload.Error) this.setState({ loading: false });        
-        else this.setState({ loading: false, isError: true });
-      })
-      .catch(error => {
-        console.log("initialPageLoader Error:", error);
-        this.setState({ loading: false, isError: true });
-      });
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  loaderScreen = () => {
-    return (
-      <div className={styles.loader_container}>
-        <img
-          src={infiniteLoader}
-          className={styles.loader}
-          alt="Loading ..."
-        />
-      </div>
-    )
-  }
-
-  emptyScreen = () => {
-    const {
-      emptyScreenMessage,
-      emptyScreenTitle,
-    } = this.props;
-
-    return (
-      <div className={styles.error_container}>
-        <div className={styles.error_title_text}>{emptyScreenTitle}</div>
-        <div className={styles.error_message_text}>{emptyScreenMessage}</div>
-      </div>
-    )
-  }
-
-  render() {
-    const {
-      children,
-      className,
       errorMessage,
-      customLoader,
-      headingErrorMessage,
-      customEmptyScreen,
-      isEmpty
-    } = this.props;
+      emptyMessage,
+      children
+    },
+    ref
+  ) => {
+    const [pageState, setPageState] = useState(pageStates.COMPLETED);
+    const [data, setData] = useState(null);
 
-    const { loading, isError, isComponentReady } = this.state;
+    const callApi = () => {
+      setPageState(pageStates.LOADING);
+      const promise = api();
 
+      promise
+        .then(data => {
+          const parsedData = responseParser(data);
+          setData(parsedData);
+          if (successCondition(parsedData)) {
+            setPageState(pageStates.COMPLETED);
+            return;
+          }
+
+          throw parsedData;
+        })
+        .catch(error => {
+          setPageState(pageStates.ERROR);
+        });
+    };
+
+    useImperativeHandle(ref, () => ({
+      callApi
+    }));
+
+    useEffect(() => {
+      if (callApiOnMount) {
+        callApi();
+      }
+    }, []);
+    console.log({ pageState });
     return (
-      <div
-        className={`${styles.main_container} ${className}`}
-      >
-        {isComponentReady &&
-          (isError ? (
-            <div className={styles.error_container}>
-              <div className={styles.error_title_text}>{headingErrorMessage}</div>
-              <div className={styles.error_message_text}>{errorMessage}</div>
-              <br />
-              <button onClick={this.makePageApiCall}>Retry</button>
-            </div>
-          ) : loading ? customLoader ? customLoader : this.loaderScreen()
-              : isEmpty ? customEmptyScreen ? customEmptyScreen : this.emptyScreen()
-                : children
-          )}
-      </div>
+      <Fragment>
+        {pageState === pageStates.LOADING && <LoaderComponent />}
+        {pageState === pageStates.COMPLETED ? (
+          isEmpty ? (
+            <EmptyComponent
+              titleEmptyMessage={emptyMessage.title}
+              emptyMessage={emptyMessage.message}
+            />
+          ) : (
+            children(data)
+          )
+        ) : null}
+        {pageState === pageStates.ERROR && (
+          <ErrorComponent
+            titleErrorMessage={errorMessage.title}
+            errorMessage={errorMessage.message}
+            onClickRetry={callApi}
+          />
+        )}
+      </Fragment>
     );
   }
-}
+);
 
 InitialPageLoader.defaultProps = {
-  showEmptyScreen: false,
-  headingErrorMessage: "Whoops! Something Went Wrong.",
-  errorMessage: "There was a problem with your action.",
   callApiOnMount: true,
-
-  customEmptyScreen: null,
+  successCondition: data => typeof data != "undefined",
+  responseParser: data => data,
   isEmpty: false,
-
-  emptyScreenTitle: 'No Result',
-  emptyScreenMessage: "Looks like its Empty"
+  errorMessage: {
+    title: "Whoops! Something Went Wrong.",
+    message: "Please Retry Again."
+  },
+  emptyMessage: {
+    title: "",
+    message: ""
+  }
 };
 
 InitialPageLoader.propTypes = {
   children: PropTypes.any.isRequired, //(Mandetory) the children to show after the api call
-  initialPageApi: PropTypes.func.isRequired, //(Mandetory) the promise in which the api call is being made
-  isEmpty: PropTypes.bool, //(Optional) Shows empty screen if true when loaoding is component without any error
-  errorMessage: PropTypes.string, //(Optional) Error message in case required differntly on different screens
-  emptyScreenMessage: PropTypes.string, //(Optional) Empty message in case required differntly on different screens
-  customLoader: PropTypes.any, //(Optional) Component to show instead of the default laoder
+  api: PropTypes.func.isRequired, //(Mandetory) the promise in which the api call is being made
+
   callApiOnMount: PropTypes.bool, //(Optional) Don't automatically want to call the api on mount, instead
-  //handle it manually using ref and calling the reload method
+  successCondition: PropTypes.func, //(Optional) Handles the custom success condition
+  responseParser: PropTypes.func, //(Optional) Parsers custom data from api
+  isEmpty: PropTypes.bool, //(Optional)
 
-  customEmptyScreen: PropTypes.any,
-  //customErrorScreen: PropTypes.any,
-
-  //Style
-  className: PropTypes.any
+  errorMessage: PropTypes.object,
+  emptyMessage: PropTypes.object
 };
 
 export default InitialPageLoader;
