@@ -3,7 +3,7 @@ import styles from "./index.module.scss";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getMovieDetails } from "./redux/actions";
-import InitialPageLoader from "Components/initialPageLoader";
+import InitialPageLoader from 'initial-page-loader';
 
 const DetailsPage = ({ match, history, getMovieDetails, movieDetails }) => {
   const id = match.params.id;

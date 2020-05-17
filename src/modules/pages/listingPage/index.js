@@ -4,11 +4,11 @@ import { bindActionCreators } from "redux";
 import {
   getMoviesListAction,
   clearMovieListAction,
-  setSearchString
+  setSearchString 
 } from "./redux/actions";
 import styles from "./index.module.scss";
 import MoviesListItem from "Components/movieListItem";
-import InitialPageLoader from "Components/initialPageLoader";
+import InitialPageLoader from 'initial-page-loader';
 
 const ListingPage = ({
   getMoviesListAction,
@@ -52,25 +52,23 @@ const ListingPage = ({
       <InitialPageLoader
         ref={initialPageLoaderRef}
         callApiOnMount={false}
-        isEmpty={moviesList && moviesList.length == 0}
-        successCondition={(data)=> data.payload.Response == 'True'}
-        emptyMessage={{
-          title: 'Search Something',
-          message: '',
-        }}
+        successCondition={data => data.payload.Response == "True"}
         api={() => getMoviesListAction(searchString)}
       >
-        {data => (
+        {() => (
           <div className={styles.movies_container}>
             <div className={styles.movies_list_container}>
-              {moviesList &&
+              {moviesList && moviesList.length == 0 ? (
+                <div>Search Something</div>
+              ) : (
                 moviesList.map((movieDetail, index) => (
                   <MoviesListItem
                     key={index}
                     movieDetail={movieDetail}
                     onItemClick={onItemClick}
                   />
-                ))}
+                ))
+              )}
             </div>
           </div>
         )}
